@@ -1,0 +1,78 @@
+# -------------------------------
+# Part 1: Arithmetic Logic (Min/Max)
+# -------------------------------
+
+def minimum(a, b):
+    return a if a < b else b
+
+def maximum(a, b):
+    return a if a > b else b
+
+# Sample Arithmetic Queries
+a, b = 5, 10
+print(f"minimum({a}, {b}) = {minimum(a, b)}")
+print(f"maximum({a}, {b}) = {maximum(a, b)}")
+
+a, b = 8, 3
+print(f"minimum({a}, {b}) = {minimum(a, b)}")
+print(f"maximum({a}, {b}) = {maximum(a, b)}")
+
+# -------------------------------
+# Part 2: Logical Inference Engine
+# -------------------------------
+
+# Given Facts
+facts = {
+    ("mary", "food"),
+    ("mary", "wine"),
+    ("john", "wine"),
+    ("john", "mary")
+}
+
+# Get all individuals in the facts
+def all_people():
+    people = set()
+    for p1, p2 in facts:
+        people.add(p1)
+        people.add(p2)
+    return people
+
+# Logical Rules (based on conditions)
+def likes(person, item):
+    # Rule 1: John likes anything Mary likes
+    if person == "john" and ("mary", item) in facts:
+        return True
+    # Rule 2: John likes anyone who likes wine
+    if person == "john":
+        for other in all_people():
+            if (other, "wine") in facts and item == other:
+                return True
+    # Rule 3: John likes anyone who likes themselves
+    if person == "john":
+        for other in all_people():
+            if (other, other) in facts and item == other:
+                return True
+    # Base case
+    return (person, item) in facts
+
+# -------------------------------
+# Part 3: Sample Queries (Prolog-style)
+# -------------------------------
+
+print("\n--- Logical Reasoning Queries ---")
+
+# Query 1: Does John like food?
+print("likes(john, food)?", "yes" if likes("john", "food") else "no")
+
+# Query 2: Does John like wine?
+print("likes(john, wine)?", "yes" if likes("john", "wine") else "no")
+
+# Query 3: Does John like food if Mary likes food?
+# Already covered via Rule 1
+print("likes(john, food)?", "yes" if likes("john", "food") else "no")
+
+# Query 4: Who does John like?
+print("\nWho does John like?")
+for entity in all_people():
+    if likes("john", entity):
+        print(f" - John likes {entity}")
